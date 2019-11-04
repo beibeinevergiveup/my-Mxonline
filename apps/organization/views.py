@@ -10,8 +10,24 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 class OrgHomeView(View):
-    def get(self, request, *args, **kwargs):
-        return
+    def get(self, request, org_id, *args, **kwargs):
+        current_page = "home"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        has_fav = False
+        # if request.user.is_authenticated:
+        all_courses = course_org.course_set.all()[:3]
+        all_teachers = course_org.teacher_set.all()[:3]
+
+        return render(request, "org-detail-homepage.html", {
+            'all_course': all_courses,
+            'all_teachers': all_teachers,
+            "course_org": course_org,
+            "current_page": current_page,
+            "has_fav" : has_fav,
+        })
+
+
 class AddAskView(View):
     def post(self, request, *args, **kwargs):
         userask_form = AddAskForm(request.POST)

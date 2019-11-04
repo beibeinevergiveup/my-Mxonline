@@ -16,19 +16,19 @@
                         <li>
                             <h2>机构类别</h2>
                             <div class="cont">
-                                <a href="?city={{ city_id }}&ct="><span class="{% ifequal category ''%}
+                                <a href="?city={{ city_id }}&ct="><span class="{% ifequal category '' %}
                                 active2
                                 {% endifequal %}">全部</span></a>
 
-                                <a href="?city={{ city_id }}&ct=pxjg"><span class="{% ifequal category 'pxjg'%}
+                                <a href="?city={{ city_id }}&ct=pxjg"><span class="{% ifequal category 'pxjg' %}
                                 active2
                                 {% endifequal %}">培训机构</span></a>
 
-                                <a href="?city={{ city_id }}&ct=gx"><span class="{% ifequal category 'gx'%}
+                                <a href="?city={{ city_id }}&ct=gx"><span class="{% ifequal category 'gx' %}
                                 active2
                                 {% endifequal %}">高校</span></a>
 
-                                <a href="?city={{ city_id }}&ct=gr"><span class="{% ifequal category 'gr'%}
+                                <a href="?city={{ city_id }}&ct=gr"><span class="{% ifequal category 'gr' %}
                                 active2
                                 {% endifequal %}">个人</span></a>
 
@@ -38,11 +38,13 @@
                             <h2>所在地区</h2>
                             <div class="more">更多</div>
                             <div class="cont">
-                                <a href="?city=&ct={{ category }}"><span class="{% ifequal city_id city.id|stringformat:'i'%}
+                                <a href="?city=&ct={{ category }}"><span
+                                        class="{% ifequal city_id city.id|stringformat:'i' %}
                                 active2
                                 {% endifequal %}">全部</span></a>
                                 {% for city in all_city %}
-                                <a href="?city={{ city.id }}&ct={{ category }}"><span class="{% ifequal city_id city.id|stringformat:'i'%}
+                                    <a href="?city={{ city.id }}&ct={{ category }}"><span
+                                            class="{% ifequal city_id city.id|stringformat:'i' %}
                                 active2
                                 {% endifequal %}">{{ city.name }}</span></a>
                                 {% endfor %}
@@ -62,24 +64,26 @@
                                 "><a href="?ct=&city=">全部</a></li>
                                 <li class="{% ifequal sort 'students' %}
                                 active
-                                {% endifequal %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">学习人数 &#8595;</a></li>
+                                {% endifequal %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">学习人数
+                                    &#8595;</a></li>
                                 <li class="{% ifequal sort 'courses' %}
                                 active
-                                {% endifequal %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">课程数 &#8595;</a></li>
+                                {% endifequal %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">课程数
+                                    &#8595;</a></li>
                             </ul>
                         </div>
 
                         {% for org in all_org.object_list %}
                             <dl class="des difdes">
                                 <dt>
-                                    <a href="org-detail-homepage.html">
+                                    <a href="{% url 'org:home' org.id %}">
                                         <img width="200" height="120" class="scrollLoading"
                                              data-url="{{ MEDIA_URL }}{{ org.image }}"/>
                                     </a>
                                 </dt>
                                 <dd>
                                     <div class="clearfix">
-                                        <a href="org-detail-homepage.html">
+                                        <a href="{% url 'org:home' org.id %}">
                                             <h1>{{ org.name }}</h1>
                                             <div class="pic fl">
                                                 {% if org.is_auth %}
@@ -121,10 +125,10 @@
                                     {% ifequal page all_org.number %}
                                         <li class="active"><a href="?page=1">{{ page }}</a></li>
                                     {% else %}
-                                       <li><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                                        <li><a href="?{{ page.querystring }}">{{ page }}</a></li>
                                     {% endifequal %}
                                 {% else %}
-                                   <li class="none">...</li>
+                                    <li class="none">...</li>
                                 {% endif %}
                             {% endfor %}
                             {% if all_org.has_next %}
@@ -182,13 +186,14 @@
             <div class="right companyrank layout">
                 <div class="head">授课机构排名</div>
                 {% for hot_org in hot_orgs %}
-                <dl class="des">
-                    <dt class="num fl">{{ forloop.counter }}</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>{{ hot_org.name }}</h1></a>
-                        <p>{{ hot_org.address }}</p>
-                    </dd>
-                </dl>
+                    <dl class="des">
+                        <dt class="num fl">{{ forloop.counter }}</dt>
+                        <dd>
+                            <a href="{% url 'org:home'  hot_org.id %}"><h1>{{ hot_org.name }}</h1></a>
+
+                            <p>{{ hot_org.address }}</p>
+                        </dd>
+                    </dl>
                 {% endfor %}
             </div>
         </div>
@@ -196,28 +201,28 @@
 {% endblock %}
 {% block custom_js %}
     <script>
-    $(function(){
-        $(document).ready(function() {
-            $('#jsStayBtn').on('click', function () {
-                $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: "{% url 'org:add_ask' %}",
-                    data: $('#jsStayForm').serialize(),
-                    async: true,
-                    success: function (data) {
-                        if (data.status == 'success') {
-                            $('#jsStayForm')[0].reset();
-                            $('#jsCompanyTips').html("");
-                            alert("提交成功")
-                        } else if (data.status == 'fail') {
-                            $('#jsCompanyTips').html(data.msg)
-                        }
-                    },
+        $(function () {
+            $(document).ready(function () {
+                $('#jsStayBtn').on('click', function () {
+                    $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "{% url 'org:add_ask' %}",
+                        data: $('#jsStayForm').serialize(),
+                        async: true,
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                $('#jsStayForm')[0].reset();
+                                $('#jsCompanyTips').html("");
+                                alert("提交成功")
+                            } else if (data.status == 'fail') {
+                                $('#jsCompanyTips').html(data.msg)
+                            }
+                        },
+                    });
                 });
             });
-        });
-    })
+        })
 
-</script>
+    </script>
 {% endblock %}
