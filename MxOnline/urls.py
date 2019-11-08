@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     #  机构相关页面
     url(r'^org/', include(('apps.organization.urls', 'organization'), namespace='org')),
+    url(r'^op/', include(('apps.operation.urls', 'operation'), namespace='op')),
+
 ]

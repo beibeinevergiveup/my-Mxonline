@@ -1,38 +1,21 @@
 class Beibei:
-    name = ''
-    age = 0
-    message = ''
-    __sex = ''
+    def __init__(self, money):
+        self.money = money
 
-    def eat(self):
-        self.message = '我' + self.name + '要吃饭啦'
 
-    def add(self, name, age):
-        self.name = name
+class Beibei2:
+    def __init__(self, age):
         self.age = age
 
-    def study(self):
-        self.message = '我' + self.name + '要学习啦'
 
-    def Myinfo(self):
-        self.message = '我叫{}'.format(self.name)
+class LittleBeibei(Beibei, Beibei2):
+    def __init__(self, age, money):
+        self.age = age
+        self.money = money
 
-    def set(self, sex):
-        self.sex = sex
-
-    def get(self):
-        return self.sex
+    def __str__(self):
+        return "beibei 今年 {}岁，他有{}钱".format(self.age,self.money)
 
 
-if __name__ == '__main__':
-    
-    beibei = Beibei()
-    beibei.add('贝贝', 20)
-    beibei.Myinfo()
-    print(beibei.message)
-    beibei.eat()
-    print(beibei.message)
-    beibei.set('男')
-    print(beibei.get())
-
-
+beibei = LittleBeibei(12, 100)
+print(beibei)
